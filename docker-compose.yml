@@ -1,0 +1,47 @@
+version: "2"
+services:
+  #proxy:
+  #  image: jasonrivers/nginx-rtmp
+  #  volumes:
+  #    - ./nginx.conf:/opt/nginx/conf/nginx.conf
+  #    - ./images:/www/images
+  #    - ./supply:/www/supply
+  #  ports:
+  #    - "8080:80"
+  #    - "1935:1935"
+  #  depends_on:
+  #    - qvc
+  #shrimp-frontend:
+  #  image: shrimp-frontend
+  #  ports:
+  #    - "8088:8088"
+  #  depends_on:
+  #    - mongo
+  #    - redis
+  shrimp-backend:
+    image: shrimp-backend
+    ports:
+      - "8089:8089"
+    #volumes:
+    #  - ./target/backend-0.0.1-SNAPSHOT.jar:/usr/app/app.jar
+    depends_on:
+      - mongo
+  #    - redis
+  shrimp-trafficgenerator:
+    image: shrimp-trafficgenerator
+    ports:
+      - "8090:8090"
+    #volumes:
+    #  - ./target/trafficgenerator-0.0.1-SNAPSHOT.jar:/usr/app/app.jar
+    depends_on:
+      - mongo
+  #    - redis
+  mongo:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+  #redis:
+  #  image: redis:latest
+  #  expose:
+  #    - "6379"
+  #
