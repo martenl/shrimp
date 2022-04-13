@@ -19,3 +19,41 @@
             name: backend-jar
             path: target/*.jar
             retention-days: 1
+    build-frontend:
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout project
+          uses: actions/checkout@v2
+        - name: Set up JDK
+          uses: actions/setup-java@v2
+          with:
+            java-version: '17'
+            distribution: 'temurin'
+        - run: cd frontend
+        - name: Run maven
+          run: mvn clean package
+        - name: Store frontend jar
+          uses: actions/upload-artifact@v2
+          with:
+            name: frontend-jar
+            path: target/*.jar
+            retention-days: 1
+    build-gateway:
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout project
+          uses: actions/checkout@v2
+        - name: Set up JDK
+          uses: actions/setup-java@v2
+          with:
+            java-version: '17'
+            distribution: 'temurin'
+        - run: cd gateway
+        - name: Run maven
+          run: mvn clean package
+        - name: Store gateway jar
+          uses: actions/upload-artifact@v2
+          with:
+            name: gateway-jar
+            path: target/*.jar
+            retention-days: 1
