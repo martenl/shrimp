@@ -29,6 +29,7 @@ public class WebConfig implements WebFluxConfigurer {
     RouterFunction<ServerResponse> indexRoute() {
         return route(GET("/"), sr -> ServerResponse.ok().contentType(MediaType.TEXT_PLAIN)
                 .body(BodyInserters.fromValue("Hello, Spring Webflux!")))
+
                 .andRoute(GET("/sensor"), pondHandlers::getPonds)
                 .andRoute(GET("/sensor/{id}"), pondHandlers::getPondById)
                 .andRoute(POST("/sensor"), pondHandlers::createPond)
@@ -37,7 +38,9 @@ public class WebConfig implements WebFluxConfigurer {
                 .andRoute(GET("/pond/exception"), pondHandlers::getException)
                 .andRoute(GET("/pond/{id}"), pondHandlers::getPondById)
                 .andRoute(PATCH("/pond/{id}"), pondHandlers::updatePond)
+                .andRoute(GET("/pond/{id}/command"), pondHandlers::sendCommand)
                 .andRoute(POST("/pond"), pondHandlers::createPond)
+                .andRoute(GET("/pond/{id}/measurement"), measurementHandlers::getMeasurements)
                 .andRoute(POST("/pond/{id}/measurement"), measurementHandlers::postMeasurement)
                 .andRoute(GET("/hello"), sr -> ServerResponse.ok().contentType(MediaType.TEXT_PLAIN)
                         .body(BodyInserters.fromValue("Hello again, Spring Webflux!")));

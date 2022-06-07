@@ -5,11 +5,14 @@ import de.martenl.shrimp.backend.handlers.PondHandlers;
 import de.martenl.shrimp.backend.handlers.RouterHandlers;
 import de.martenl.shrimp.backend.persistence.PondRepository;
 import de.martenl.shrimp.backend.services.AnalyticsService;
+import de.martenl.shrimp.backend.services.CommandService;
 import de.martenl.shrimp.backend.services.PondService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.time.Clock;
@@ -28,6 +31,9 @@ public class Beans {
     Clock clock() {
         return Clock.systemDefaultZone();
     }
+
+    @Autowired
+    KafkaTemplate<String, Object> kafkaTemplate;
 
     @Bean
     WebClient webclient() {
@@ -48,7 +54,7 @@ public class Beans {
 
     @Bean
     PondHandlers pondHandlers(PondRepository pondRepository, PondService pondService, ApplicationEventPublisher applicationEventPublisher) {
-        return new PondHandlers(pondRepository, pondService, applicationEventPublisher);
+        return new PondHandlers(pondRepository, pondService, applicationEventPublisher/*, kafkaTemplate*/);
     }
 
     @Bean
@@ -60,5 +66,10 @@ public class Beans {
     RouterHandlers routerHandlers(WebClient webClient) {
         var mySwitch = new AtomicBoolean(false);
         return new RouterHandlers(mySwitch, webClient);
+    }
+
+    @Bean
+    CommandService commandService(KafkaTemplate<String, Object> kafkaTemplate) {
+        return new CommandService(kafkaTemplate);
     }
 }

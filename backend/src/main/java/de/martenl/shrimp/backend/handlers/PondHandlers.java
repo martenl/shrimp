@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
@@ -26,11 +27,13 @@ public class PondHandlers {
     private final PondRepository pondRepository;
     private final PondService pondService;
     private final ApplicationEventPublisher applicationEventPublisher;
+    //private final KafkaTemplate<String, String> kafkaTemplate;
 
-    public PondHandlers(PondRepository pondRepository, PondService pondService, ApplicationEventPublisher applicationEventPublisher) {
+    public PondHandlers(PondRepository pondRepository, PondService pondService, ApplicationEventPublisher applicationEventPublisher/*, KafkaTemplate<String, String> kafkaTemplate*/) {
         this.pondRepository = pondRepository;
         this.pondService = pondService;
         this.applicationEventPublisher = applicationEventPublisher;
+        //this.kafkaTemplate = kafkaTemplate;
     }
 
     public Mono<ServerResponse> getPonds(final ServerRequest serverRequest) {
@@ -72,4 +75,9 @@ public class PondHandlers {
                 .flatMap(pond -> ok().contentType(MediaType.APPLICATION_JSON).bodyValue(pond));
     }
 
+    public Mono<ServerResponse> sendCommand(final ServerRequest serverRequest) {
+        //kafkaTemplate.send("command", "I command thy");
+
+        return ServerResponse.ok().build();
+    }
 }

@@ -18,6 +18,7 @@ public class WebConfig {
         return route(GET("/"), sr -> ServerResponse.ok().contentType(MediaType.TEXT_PLAIN)
                 .body(BodyInserters.fromValue("Hello, Spring Webflux!")))
                 .andRoute(GET("/hello"), sr -> ServerResponse.ok().contentType(MediaType.TEXT_PLAIN)
-                        .body(BodyInserters.fromValue("Hello again, Spring Webflux!")));
+                        .body(BodyInserters.fromValue("Hello again from the shrimp frontend!")))
+                .andRoute(GET("/hello/{id}"), sr -> ServerResponse.ok().body(BodyInserters.fromValue("ID: "+sr.pathVariable("id"))));
     }
 }

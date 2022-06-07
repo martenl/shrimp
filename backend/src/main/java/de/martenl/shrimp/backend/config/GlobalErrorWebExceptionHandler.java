@@ -14,8 +14,9 @@ import org.springframework.web.reactive.function.server.*;
 import reactor.core.publisher.Mono;
 
 import java.util.Map;
-@Component
-@Order(-2)
+
+//@Component
+//@Order(-2)
 public class GlobalErrorWebExceptionHandler extends
         AbstractErrorWebExceptionHandler {
 
